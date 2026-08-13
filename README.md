@@ -74,9 +74,19 @@ To make it a one-click launcher:
 From then on, one click on the Dock icon opens a new terminal with a random theme.
 
 _Note_: if macOS says the app "can't be opened because it is from an unidentified
-developer" (common for apps downloaded rather than `git clone`d, since they get a
-quarantine flag), right-click the app and choose Open instead of double-clicking, or run
-`xattr -cr "tools/Random Terminal Theme.app"` after cloning.
+developer" (common for apps downloaded as a ZIP rather than `git clone`d, since browser
+downloads get a quarantine flag that `git clone` doesn't set), run the setup script once:
+
+```sh
+$ ./tools/setup.sh
+```
+
+This clears the quarantine flag and re-signs the app, so it opens like any normal app from
+then on. If you'd rather do it by hand: right-click the app and choose Open instead of
+double-clicking, or run `xattr -cr "tools/Random Terminal Theme.app"` directly. There's no
+way to script macOS's "Open Anyway" button in System Settings itself - Gatekeeper requires
+that specific click from a human on purpose - but clearing the quarantine flag has the same
+effect and skips needing it at all.
 
 If you move the app outside this repo, it falls back to a hardcoded path from wherever it
 was originally compiled, which won't exist on another machine. To rebuild it from scratch:
