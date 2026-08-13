@@ -14,34 +14,13 @@ _Note_: Some default macOS themes are not included here (default themes like
 
 ## Prerequisites
 
-Run this once after cloning or downloading the repo:
-
-```sh
-$ ./tools/setup.sh
-```
-
-It handles setup end-to-end in one script:
-
-- **Color output for your shell.** Terminal themes only override the ANSI color palette -
-  commands like `ls` still need color output turned on separately (see [this comment][2] for
-  background). The script detects `zsh` or `bash` and adds `CLICOLOR`/`LSCOLORS` plus an
-  `ls` alias to your shell's rc file. Skipped if already configured.
-- **macOS Gatekeeper.** If you downloaded this repo as a ZIP (e.g. GitHub's "Download ZIP"
-  button) instead of `git clone`, every file - including `tools/Random Terminal Theme.app` -
-  gets quarantined by macOS and refuses to open as being from an "unidentified developer".
-  The script clears that flag repo-wide and re-signs the app. A plain `git clone` never sets
-  the flag, so this half is a no-op in that case.
-- **Launches `tools/Random Terminal Theme.app`.** See [Open a Random Theme with One
-  Click](#open-a-random-theme-with-one-click) below for what that does on first run.
-
-Safe to re-run any time; every step is idempotent.
-
-[2]: https://github.com/lysyi3m/macos-terminal-themes/issues/1#issuecomment-148635036
+- Clone or download this repo
+- Run `./tools/setup.sh`
 
 
 ## Installation Instructions
 
-- Clone or download this repo
+- Start a colored shell
 
 - Go to `themes/` folder
 
@@ -69,51 +48,21 @@ preferences in memory, so profiles imported while it's running may not show up (
 overwritten) until you quit and reopen it.
 
 
-## Open a Random Theme with One Click
+## Applet Installation
 
-`tools/Random Terminal Theme.app` opens a new Terminal window with a randomly chosen theme
-from `themes/` applied, and prints which one it picked. `./tools/setup.sh` already launches
-it once for you as its last step, so if you've run that, there's nothing more to do here.
+Run `./tools/setup.sh` (see [Prerequisites](#prerequisites)) - it already launches
+`tools/Random Terminal Theme.app` for you once as its last step.
 
-It's self-contained: the first time you run it, it checks which themes in `themes/` aren't
-yet registered as Terminal profiles and imports the missing ones automatically (the same
-thing `import-themes.sh` does), so cloning the repo and double-clicking this app is all you
-need - no separate import step. This first run takes a minute or two while it imports;
-every run after that is instant. macOS will also ask you to approve it controlling
-Terminal.app the first time - allow that, it's how the app switches profiles and opens
-windows.
+From then on, either:
 
-### Before your first double-click
+- Double click `tools/Random Terminal Theme.app` any time you want a random theme, or
+- Pin it to the Dock:
+  1. Drag `tools/Random Terminal Theme.app` from Finder onto your `Applications` folder (or
+     its shortcut in the Finder sidebar).
+  2. Open `/Applications` in Finder and drag the app's icon onto the Dock, dropping it
+     anywhere to the right of the divider line (next to your other apps).
 
-If `./tools/setup.sh` from [Prerequisites](#prerequisites) has already been run, the app
-opens normally - skip straight to pinning it below.
-
-If you skipped that and macOS says the app "can't be opened because it is from an
-unidentified developer" (only happens with ZIP downloads, not `git clone`), run
-`./tools/setup.sh`, or do it by hand: right-click the app and choose Open instead of
-double-clicking, or run `xattr -cr "tools/Random Terminal Theme.app"` directly. There's no
-way to script macOS's "Open Anyway" button in System Settings itself - Gatekeeper requires
-that specific click from a human on purpose - but clearing the quarantine flag has the same
-effect and skips needing it at all.
-
-### Pinning it to the Dock
-
-1. Drag `tools/Random Terminal Theme.app` from Finder onto your `Applications` folder (or
-   its shortcut in the Finder sidebar) to install it there.
-2. Open `/Applications` in Finder and drag the app's icon onto the Dock, dropping it
-   anywhere to the right of the divider line (next to your other apps). That's the entire
-   process for pinning any app to the Dock - no separate "add to Dock" menu or setting
-   required, the drag itself creates the shortcut.
-
-From then on, one click on the Dock icon opens a new terminal with a random theme.
-
-If you move the app outside this repo, it falls back to a hardcoded path from wherever it
-was originally compiled, which won't exist on another machine. To rebuild it from scratch:
-
-```sh
-$ osacompile -o "tools/Random Terminal Theme.app" tools/random-theme.applescript
-$ codesign --force --deep -s - "tools/Random Terminal Theme.app"
-```
+  One click on the Dock icon then opens a new terminal with a random theme.
 
 
 ## Tools
