@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 #
 # One-time setup after cloning or downloading this repo. Clears the macOS
-# quarantine flag on the random-theme app and re-signs it, so it opens
+# quarantine flag from the whole repo (not just the app - every .terminal
+# file gets quarantined too, which otherwise blocks the app's own theme
+# importer partway through) and re-signs the app, so everything opens
 # normally instead of triggering Gatekeeper's "unidentified developer"
 # warning.
 #
@@ -19,7 +21,7 @@ if [ ! -d "$APP" ]; then
   exit 1
 fi
 
-xattr -cr "$APP"
+xattr -cr "$REPO_ROOT"
 codesign --force --deep -s - "$APP"
 
-echo "Done. '$APP' should now open normally - double-click it in Finder."
+echo "Done. '$APP' and every theme in themes/ should now open normally."
