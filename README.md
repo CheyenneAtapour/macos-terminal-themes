@@ -62,7 +62,28 @@ every run after that is instant. macOS will also ask you to approve it controlli
 Terminal.app the first time - allow that, it's how the app switches profiles and opens
 windows.
 
-To make it a one-click launcher:
+### Before your first double-click
+
+If you downloaded this repo as a ZIP (e.g. GitHub's "Download ZIP" button) instead of
+`git clone`, the app will refuse to open the first time - macOS quarantines anything a
+browser downloads and won't run unsigned apps from an "unidentified developer" without
+extra confirmation. `git clone` doesn't set that flag, so if you cloned instead of
+downloading a ZIP, you can skip this and just double-click the app.
+
+If you do hit that warning, run this once:
+
+```sh
+$ ./tools/setup.sh
+```
+
+This clears the quarantine flag and re-signs the app, so double-clicking it works like any
+normal app from then on. (By hand, instead: right-click the app and choose Open instead of
+double-clicking, or run `xattr -cr "tools/Random Terminal Theme.app"` directly. There's no
+way to script macOS's "Open Anyway" button in System Settings itself - Gatekeeper requires
+that specific click from a human on purpose - but clearing the quarantine flag has the same
+effect and skips needing it at all.)
+
+### Pinning it to the Dock
 
 1. Drag `tools/Random Terminal Theme.app` from Finder onto your `Applications` folder (or
    its shortcut in the Finder sidebar) to install it there.
@@ -72,21 +93,6 @@ To make it a one-click launcher:
    required, the drag itself creates the shortcut.
 
 From then on, one click on the Dock icon opens a new terminal with a random theme.
-
-_Note_: if macOS says the app "can't be opened because it is from an unidentified
-developer" (common for apps downloaded as a ZIP rather than `git clone`d, since browser
-downloads get a quarantine flag that `git clone` doesn't set), run the setup script once:
-
-```sh
-$ ./tools/setup.sh
-```
-
-This clears the quarantine flag and re-signs the app, so it opens like any normal app from
-then on. If you'd rather do it by hand: right-click the app and choose Open instead of
-double-clicking, or run `xattr -cr "tools/Random Terminal Theme.app"` directly. There's no
-way to script macOS's "Open Anyway" button in System Settings itself - Gatekeeper requires
-that specific click from a human on purpose - but clearing the quarantine flag has the same
-effect and skips needing it at all.
 
 If you move the app outside this repo, it falls back to a hardcoded path from wherever it
 was originally compiled, which won't exist on another machine. To rebuild it from scratch:
