@@ -14,15 +14,25 @@ _Note_: Some default macOS themes are not included here (default themes like
 
 ## Prerequisites
 
-Since terminal themes are just color schemes, you need to enable color formatting for your shell first - see [this comment][2] for more details, or just run:
+Run this once after cloning or downloading the repo:
 
 ```sh
-$ ./tools/enable-colors.sh
+$ ./tools/setup.sh
 ```
 
-It detects whether you're on `zsh` or `bash` and adds `CLICOLOR`/`LSCOLORS` plus an `ls`
-alias to your shell's rc file (skipping it if you already have color output configured).
-It's a no-op if you already see colored `ls` output.
+It handles two unrelated one-time setup steps in a single script:
+
+- **Color output for your shell.** Terminal themes only override the ANSI color palette -
+  commands like `ls` still need color output turned on separately (see [this comment][2] for
+  background). The script detects `zsh` or `bash` and adds `CLICOLOR`/`LSCOLORS` plus an
+  `ls` alias to your shell's rc file. Skipped if already configured.
+- **macOS Gatekeeper.** If you downloaded this repo as a ZIP (e.g. GitHub's "Download ZIP"
+  button) instead of `git clone`, every file - including `tools/Random Terminal Theme.app` -
+  gets quarantined by macOS and refuses to open as being from an "unidentified developer".
+  The script clears that flag repo-wide and re-signs the app. A plain `git clone` never sets
+  the flag, so this half is a no-op in that case.
+
+Safe to re-run any time; both steps are idempotent.
 
 [2]: https://github.com/lysyi3m/macos-terminal-themes/issues/1#issuecomment-148635036
 
@@ -72,24 +82,16 @@ windows.
 
 ### Before your first double-click
 
-If you downloaded this repo as a ZIP (e.g. GitHub's "Download ZIP" button) instead of
-`git clone`, the app will refuse to open the first time - macOS quarantines anything a
-browser downloads and won't run unsigned apps from an "unidentified developer" without
-extra confirmation. `git clone` doesn't set that flag, so if you cloned instead of
-downloading a ZIP, you can skip this and just double-click the app.
+If `./tools/setup.sh` from [Prerequisites](#prerequisites) has already been run, the app
+opens normally - skip straight to pinning it below.
 
-If you do hit that warning, run this once:
-
-```sh
-$ ./tools/setup.sh
-```
-
-This clears the quarantine flag and re-signs the app, so double-clicking it works like any
-normal app from then on. (By hand, instead: right-click the app and choose Open instead of
+If you skipped that and macOS says the app "can't be opened because it is from an
+unidentified developer" (only happens with ZIP downloads, not `git clone`), run
+`./tools/setup.sh`, or do it by hand: right-click the app and choose Open instead of
 double-clicking, or run `xattr -cr "tools/Random Terminal Theme.app"` directly. There's no
 way to script macOS's "Open Anyway" button in System Settings itself - Gatekeeper requires
 that specific click from a human on purpose - but clearing the quarantine flag has the same
-effect and skips needing it at all.)
+effect and skips needing it at all.
 
 ### Pinning it to the Dock
 
