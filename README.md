@@ -20,7 +20,7 @@ Run this once after cloning or downloading the repo:
 $ ./tools/setup.sh
 ```
 
-It handles two unrelated one-time setup steps in a single script:
+It handles setup end-to-end in one script:
 
 - **Color output for your shell.** Terminal themes only override the ANSI color palette -
   commands like `ls` still need color output turned on separately (see [this comment][2] for
@@ -31,8 +31,10 @@ It handles two unrelated one-time setup steps in a single script:
   gets quarantined by macOS and refuses to open as being from an "unidentified developer".
   The script clears that flag repo-wide and re-signs the app. A plain `git clone` never sets
   the flag, so this half is a no-op in that case.
+- **Launches `tools/Random Terminal Theme.app`.** See [Open a Random Theme with One
+  Click](#open-a-random-theme-with-one-click) below for what that does on first run.
 
-Safe to re-run any time; both steps are idempotent.
+Safe to re-run any time; every step is idempotent.
 
 [2]: https://github.com/lysyi3m/macos-terminal-themes/issues/1#issuecomment-148635036
 
@@ -70,7 +72,8 @@ overwritten) until you quit and reopen it.
 ## Open a Random Theme with One Click
 
 `tools/Random Terminal Theme.app` opens a new Terminal window with a randomly chosen theme
-from `themes/` applied, and prints which one it picked.
+from `themes/` applied, and prints which one it picked. `./tools/setup.sh` already launches
+it once for you as its last step, so if you've run that, there's nothing more to do here.
 
 It's self-contained: the first time you run it, it checks which themes in `themes/` aren't
 yet registered as Terminal profiles and imports the missing ones automatically (the same
