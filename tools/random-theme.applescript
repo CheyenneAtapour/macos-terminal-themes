@@ -54,10 +54,21 @@ end if
 
 set themeCount to count themeFiles
 set randomTheme to item (random number from 1 to themeCount) of themeFiles
+set randomThemePath to themesFolder & "/" & randomTheme & ".terminal"
+
+-- Open the .terminal file directly (same as double-clicking it) rather than
+-- using Terminal's "make new window" / "settings set" AppleScript commands,
+-- which have proven unreliable (intermittent "AppleEvent handler failed").
+-- This is the same open-a-file mechanism the import loop above already uses.
+tell application "Terminal" to set beforeCount to count windows
+do shell script "open " & quoted form of randomThemePath
+repeat 50 times
+	tell application "Terminal" to set afterCount to count windows
+	if afterCount > beforeCount then exit repeat
+	delay 0.1
+end repeat
 
 tell application "Terminal"
 	activate
-	set newWindow to make new window
-	set current settings of newWindow to settings set randomTheme
-	do script ("echo " & quoted form of ("Terminal profile: " & randomTheme)) in newWindow
+	do script ("echo " & quoted form of ("Terminal profile: " & randomTheme)) in front window
 end tell
