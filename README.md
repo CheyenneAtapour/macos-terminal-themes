@@ -51,8 +51,16 @@ overwritten) until you quit and reopen it.
 
 ## Open a Random Theme with One Click
 
-`tools/Random Terminal Theme.app` opens a new Terminal window/tab with a randomly chosen
-theme from `themes/` applied, and prints which one it picked.
+`tools/Random Terminal Theme.app` opens a new Terminal window with a randomly chosen theme
+from `themes/` applied, and prints which one it picked.
+
+It's self-contained: the first time you run it, it checks which themes in `themes/` aren't
+yet registered as Terminal profiles and imports the missing ones automatically (the same
+thing `import-themes.sh` does), so cloning the repo and double-clicking this app is all you
+need - no separate import step. This first run takes a minute or two while it imports;
+every run after that is instant. macOS will also ask you to approve it controlling
+Terminal.app the first time - allow that, it's how the app switches profiles and opens
+windows.
 
 To make it a one-click launcher:
 
@@ -65,12 +73,17 @@ To make it a one-click launcher:
 
 From then on, one click on the Dock icon opens a new terminal with a random theme.
 
-_Note_: the committed build has an absolute `themes/` path baked in from wherever it was
-compiled, so it only works out of the box on that exact machine/path. If you clone this repo
-elsewhere, rebuild it first:
+_Note_: if macOS says the app "can't be opened because it is from an unidentified
+developer" (common for apps downloaded rather than `git clone`d, since they get a
+quarantine flag), right-click the app and choose Open instead of double-clicking, or run
+`xattr -cr "tools/Random Terminal Theme.app"` after cloning.
+
+If you move the app outside this repo, it falls back to a hardcoded path from wherever it
+was originally compiled, which won't exist on another machine. To rebuild it from scratch:
 
 ```sh
 $ osacompile -o "tools/Random Terminal Theme.app" tools/random-theme.applescript
+$ codesign --force --deep -s - "tools/Random Terminal Theme.app"
 ```
 
 
