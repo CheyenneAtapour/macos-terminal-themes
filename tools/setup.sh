@@ -8,12 +8,14 @@
 #      normally-manual shell config step.
 #   2. Clears macOS's Gatekeeper quarantine flag from the whole repo and
 #      re-signs the random-theme app, so it (and every .terminal file it
-#      imports) opens normally instead of being blocked as being from an
+#      opens) works normally instead of being blocked as being from an
 #      "unidentified developer". This flag only gets set if you downloaded
 #      a ZIP through a browser - a plain `git clone` never triggers it, so
 #      that half is a no-op in that case.
-#   3. Launches the app, which imports every theme into Terminal on this
-#      first run (takes a minute or two) and opens one at random.
+#   3. Launches the app, which opens one random theme immediately - it
+#      doesn't need themes registered as Terminal profiles first. Run
+#      tools/import-themes.sh separately if you also want every theme
+#      listed in Terminal > Settings > Profiles.
 
 set -euo pipefail
 
@@ -65,5 +67,5 @@ echo "Cleared quarantine and re-signed '$APP'."
 
 # --- 3. Launch it ---
 
-echo "Opening '$APP' - first launch imports every theme into Terminal, which takes a minute or two; macOS may also ask you to approve it controlling Terminal.app."
+echo "Opening '$APP' - macOS may ask you to approve it controlling Terminal.app the first time."
 open "$APP"

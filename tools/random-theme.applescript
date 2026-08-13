@@ -1,8 +1,8 @@
--- Opens a new Terminal window/tab using a randomly chosen theme from themes/.
--- On first run (or whenever new themes have been added to the repo), it
--- also imports any theme that isn't yet registered as a Terminal profile,
--- the same way tools/import-themes.sh does - so this app is the only thing
--- someone needs to run after cloning the repo.
+-- Opens a new Terminal window using a randomly chosen theme from themes/.
+-- Opens the .terminal file directly (see below), so it works whether or not
+-- that theme has ever been imported into Terminal's profile list - use
+-- tools/import-themes.sh separately if you want every theme registered
+-- there too (e.g. to see them all in Terminal > Settings > Profiles).
 --
 -- Compiled with:
 --   osacompile -o "tools/Random Terminal Theme.app" tools/random-theme.applescript
@@ -20,37 +20,6 @@ if themesFolder is "" then
 end if
 
 set themeFiles to paragraphs of (do shell script "ls " & quoted form of themesFolder & " | sed 's/\\.terminal$//'")
-
-tell application "Terminal"
-	activate
-	set knownThemes to name of every settings set
-end tell
-
-set missingThemes to {}
-repeat with themeName in themeFiles
-	if knownThemes does not contain (themeName as string) then
-		set end of missingThemes to (themeName as string)
-	end if
-end repeat
-
-if (count missingThemes) > 0 then
-	display notification ("Importing " & (count missingThemes) & " theme(s) into Terminal - this only happens once and may take a minute...") with title "Random Terminal Theme"
-
-	repeat with themeName in missingThemes
-		set themePath to themesFolder & "/" & themeName & ".terminal"
-		tell application "Terminal" to set beforeCount to count windows
-		do shell script "open " & quoted form of themePath
-		repeat 50 times
-			tell application "Terminal" to set afterCount to count windows
-			if afterCount > beforeCount then exit repeat
-			delay 0.1
-		end repeat
-		delay 0.2
-		tell application "Terminal" to close front window
-	end repeat
-
-	display notification "All themes imported." with title "Random Terminal Theme"
-end if
 
 set themeCount to count themeFiles
 set randomTheme to item (random number from 1 to themeCount) of themeFiles
