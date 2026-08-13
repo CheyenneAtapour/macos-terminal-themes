@@ -31,6 +31,49 @@ Since terminal themes are just color schemes, you need to enable color formattin
 - Set the theme as the default one with `Shell -> Use Settings as Default`
 
 
+## Import All Themes at Once
+
+Double-clicking each `.terminal` file individually is tedious with this many themes, so
+`tools/import-themes.sh` automates it:
+
+```sh
+$ ./tools/import-themes.sh
+```
+
+It has Terminal.app open and close each file in `themes/` in turn - the same thing double-
+clicking does - which registers every theme as a profile under Terminal > Settings >
+Profiles. It does not change your default profile.
+
+If Terminal.app is already open, quit it before running the script. Terminal caches its
+preferences in memory, so profiles imported while it's running may not show up (or may get
+overwritten) until you quit and reopen it.
+
+
+## Open a Random Theme with One Click
+
+`tools/Random Terminal Theme.app` opens a new Terminal window/tab with a randomly chosen
+theme from `themes/` applied, and prints which one it picked.
+
+To make it a one-click launcher:
+
+1. Drag `tools/Random Terminal Theme.app` from Finder onto your `Applications` folder (or
+   its shortcut in the Finder sidebar) to install it there.
+2. Open `/Applications` in Finder and drag the app's icon onto the Dock, dropping it
+   anywhere to the right of the divider line (next to your other apps). That's the entire
+   process for pinning any app to the Dock - no separate "add to Dock" menu or setting
+   required, the drag itself creates the shortcut.
+
+From then on, one click on the Dock icon opens a new terminal with a random theme.
+
+_Note_: the committed build has an absolute `themes/` path baked in from wherever it was
+compiled, so it only works out of the box on that exact machine/path. If you clone this repo
+elsewhere, rebuild it first:
+
+```sh
+$ osacompile -o "tools/Random Terminal Theme.app" tools/random-theme.applescript
+```
+
+
 ## Tools
 
 ### Convert iTerm2 Color Scheme
