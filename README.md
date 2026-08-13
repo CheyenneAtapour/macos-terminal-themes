@@ -14,7 +14,15 @@ _Note_: Some default macOS themes are not included here (default themes like
 
 ## Prerequisites
 
-Since terminal themes are just color schemes, you need to enable color formatting for your shell first - see [this comment][2] for more details
+Since terminal themes are just color schemes, you need to enable color formatting for your shell first - see [this comment][2] for more details, or just run:
+
+```sh
+$ ./tools/enable-colors.sh
+```
+
+It detects whether you're on `zsh` or `bash` and adds `CLICOLOR`/`LSCOLORS` plus an `ls`
+alias to your shell's rc file (skipping it if you already have color output configured).
+It's a no-op if you already see colored `ls` output.
 
 [2]: https://github.com/lysyi3m/macos-terminal-themes/issues/1#issuecomment-148635036
 
