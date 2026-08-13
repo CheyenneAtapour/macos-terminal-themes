@@ -12,6 +12,8 @@
 #      "unidentified developer". This flag only gets set if you downloaded
 #      a ZIP through a browser - a plain `git clone` never triggers it, so
 #      that half is a no-op in that case.
+#   3. Launches the app, which imports every theme into Terminal on this
+#      first run (takes a minute or two) and opens one at random.
 
 set -euo pipefail
 
@@ -60,4 +62,8 @@ xattr -cr "$REPO_ROOT"
 codesign --force --deep -s - "$APP"
 
 echo "Cleared quarantine and re-signed '$APP'."
-echo "Done - you can now double-click '$APP' directly, no System Settings needed."
+
+# --- 3. Launch it ---
+
+echo "Opening '$APP' - first launch imports every theme into Terminal, which takes a minute or two; macOS may also ask you to approve it controlling Terminal.app."
+open "$APP"
