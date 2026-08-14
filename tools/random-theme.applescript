@@ -39,5 +39,13 @@ end repeat
 
 tell application "Terminal"
 	activate
-	do script ("echo " & quoted form of ("Terminal profile: " & randomTheme)) in front window
+	-- CLAUDE_CODE_DISABLE_TERMINAL_TITLE keeps the theme name in the title bar
+	-- even if `claude` is run in this window - without it, Claude Code's own
+	-- task-status title updates (OSC escape sequences) overwrite the custom
+	-- title we set below. Exported only in this shell, not globally, so other
+	-- Claude Code windows keep their normal live task-status titles.
+	do script ("export THEME_PROFILE=" & quoted form of randomTheme & " CLAUDE_CODE_DISABLE_TERMINAL_TITLE=1; echo " & quoted form of ("Terminal profile: " & randomTheme)) in front window
+	-- Also surface the theme name in the window's title bar (alongside the
+	-- existing echo/env var), so it's visible without looking at the shell.
+	set custom title of front window to randomTheme
 end tell
